@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swiss.FCh.DocumentService.Client", "Swiss.FCh.DocumentService.Client\Swiss.FCh.DocumentService.Client.csproj", "{A5DB0AF8-ACBF-4946-809B-09A266E7BBE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swiss.FCh.DocumentService.Client.Tests", "Swiss.FCh.DocumentService.Client.Tests\Swiss.FCh.DocumentService.Client.Tests.csproj", "{6DFAEAB2-8EC4-4F6A-B215-8118A40FD57C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{BFA37F9D-2B98-4167-850B-786C9787FD2F}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\nuget.config = ..\..\nuget.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5DB0AF8-ACBF-4946-809B-09A266E7BBE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5DB0AF8-ACBF-4946-809B-09A266E7BBE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5DB0AF8-ACBF-4946-809B-09A266E7BBE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5DB0AF8-ACBF-4946-809B-09A266E7BBE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DFAEAB2-8EC4-4F6A-B215-8118A40FD57C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DFAEAB2-8EC4-4F6A-B215-8118A40FD57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DFAEAB2-8EC4-4F6A-B215-8118A40FD57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DFAEAB2-8EC4-4F6A-B215-8118A40FD57C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
