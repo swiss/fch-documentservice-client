@@ -12,8 +12,8 @@ public class SpreadsheetOptions
 
 public class Spreadsheet
 {
-    public ICollection<Cell> HeaderCells { get; init; } = [];
-    public ICollection<ICollection<Cell>> BodyCells { get; init; } = [];
+    public IList<Cell> HeaderCells { get; init; } = [];
+    public IList<IList<Cell>> BodyCells { get; init; } = [];
     public TableOptions? TableOptions { get; set; }
 }
 
@@ -66,7 +66,7 @@ public class TableOptions
     public bool CreateTable { get; init; }
     public string? TableRange { get; init; }
     public bool ShowTotalsRow { get; init; }
-    public ICollection<TotalCell> TotalCells { get; init; } = [];
+    public IList<TotalCell> TotalCells { get; init; } = [];
 }
 
 public class TotalCell
