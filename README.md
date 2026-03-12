@@ -5,14 +5,14 @@ This library simplyfies the usage of the *DocumentService* which is run by the f
 ## usage
 ### DI Injection
 First, register the service in you DI container.
-```
+```csharp
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDocumentService(builder.Configuration);
 ```
 
 ### Health Check
 Add a health check for the document service.
-```
+```csharp
 builder.Services
        .AddHealthChecks()
        .AddDocumentService();
@@ -36,7 +36,7 @@ In your appsettings, add the following.
 ### Excel Generation
 Generate an Excel sheet like this.
 
-```
+```csharp
 		var spreadsheet = new Spreadsheet
         {
             HeaderCells = [...]
@@ -54,7 +54,7 @@ Generate an Excel sheet like this.
 ### Template Generation
 Generate a document based on an Aspose LINQ Syntax Template.
 
-```
+```csharp
 //generate a Word document
 var resultingWordDoc = await _documentService.CreateWordFromTemplate($"pathToYourTemplate.docx", dataObject, "yourDataObjectRootElementName");
 
@@ -67,14 +67,14 @@ Note that your dataObject can be any object (it will be serialized to JSON and s
 ### Word to HTML Conversion
 You can convert a Word document to HTML as follows.
 
-```
+```csharp
 var result = await _documentService.ConvertWordToHtml("your_word_file_path");
 ```
 
 ### Extract Parts of a Document
 You can extract parts of a Word document as follows.
 
-```
+```csharp
 var result = await _documentService.ExtractContentFromWord("your_word_file_path", new WordExtractOptions { .. });
 ```
 
