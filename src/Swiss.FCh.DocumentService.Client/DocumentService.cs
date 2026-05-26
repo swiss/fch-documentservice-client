@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
@@ -41,7 +41,7 @@ internal class DocumentService : IDocumentService
         }
     }
 
-    public async Task<Stream> CreateWordFromTemplate(string templateFilePath, object data, string? docRootElementName = null)
+    public async Task<Stream> CreateWordFromTemplate(string templateFilePath, object data, string? docRootElementName = null, string? documentCulture = null)
     {
         try
         {
@@ -57,6 +57,10 @@ internal class DocumentService : IDocumentService
             {
                 formData.Add(new StringContent(docRootElementName), "docRootElementName");
             }
+            if (!string.IsNullOrWhiteSpace(documentCulture))
+            {
+                formData.Add(new StringContent(documentCulture), "documentCulture");
+            }
 
             var stream = await GetResponse("api/v1/word/templating/template", formData).ConfigureAwait(false);
             return stream;
@@ -67,7 +71,7 @@ internal class DocumentService : IDocumentService
         }
     }
 
-    public async Task<Stream> CreatePdfFromTemplate(string templateFilePath, object data, string? docRootElementName = null)
+    public async Task<Stream> CreatePdfFromTemplate(string templateFilePath, object data, string? docRootElementName = null, string? documentCulture = null)
     {
         try
         {
@@ -82,6 +86,10 @@ internal class DocumentService : IDocumentService
             if (!string.IsNullOrWhiteSpace(docRootElementName))
             {
                 formData.Add(new StringContent(docRootElementName), "docRootElementName");
+            }
+            if (!string.IsNullOrWhiteSpace(documentCulture))
+            {
+                formData.Add(new StringContent(documentCulture), "documentCulture");
             }
 
             var stream = await GetResponse("api/v1/word/templating/pdf", formData).ConfigureAwait(false);

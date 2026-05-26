@@ -56,13 +56,15 @@ Generate a document based on an Aspose LINQ Syntax Template.
 
 ```csharp
 //generate a Word document
-var resultingWordDoc = await _documentService.CreateWordFromTemplate($"pathToYourTemplate.docx", dataObject, "yourDataObjectRootElementName");
+var resultingWordDoc = await _documentService.CreateWordFromTemplate($"pathToYourTemplate.docx", dataObject, "yourDataObjectRootElementName", "documentCulture");
 
 //generate a PDF
-var resultingPdf = await _documentService.CreateWordFromTemplate($"pathToYourTemplate.docx", dataObject, "yourDataObjectRootElementName");
+var resultingPdf = await _documentService.CreateWordFromTemplate($"pathToYourTemplate.docx", dataObject, "yourDataObjectRootElementName", "documentCulture");
 ```
 
 Note that your dataObject can be any object (it will be serialized to JSON and should match the placeholders in your word template).
+
+The optional documentCulture parameter should contain a valid culture specifier (e.g. "de-CH", "fr-CH" etc.)
 
 ### Word to HTML Conversion
 You can convert a Word document to HTML as follows.
