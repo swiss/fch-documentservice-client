@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
@@ -6,6 +6,7 @@ using System.Web;
 using Swiss.FCh.DocumentService.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Swiss.FCh.DocumentService.Client;
 
@@ -23,7 +24,7 @@ internal class DocumentService : IDocumentService
         try
         {
             var json = JsonSerializer.Serialize(spreadsheet);
-            var jsonStringContent = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
+            using var jsonStringContent = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
             if (options is not null)
             {
                 if (options.SetAutoFilter)
@@ -45,21 +46,7 @@ internal class DocumentService : IDocumentService
     {
         try
         {
-            using var formData = new MultipartFormDataContent();
-
-            var fileStream = File.OpenRead(templateFilePath);
-            var fileContent = new StreamContent(fileStream);
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
-
-            formData.Add(fileContent, "template", Path.GetFileName(templateFilePath));
-            formData.Add(new StringContent(JsonSerializer.Serialize(data)), "jsonData");
-            if (!string.IsNullOrWhiteSpace(docRootElementName))
-            {
-                formData.Add(new StringContent(docRootElementName), "docRootElementName");
-            }
-
-            var stream = await GetResponse("api/v1/word/templating/template", formData).ConfigureAwait(false);
-            return stream;
+            return await CreateDocumentFromTemplate("template", templateFilePath, data, docRootElementName).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -71,21 +58,7 @@ internal class DocumentService : IDocumentService
     {
         try
         {
-            using var formData = new MultipartFormDataContent();
-
-            var fileStream = File.OpenRead(templateFilePath);
-            var fileContent = new StreamContent(fileStream);
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
-
-            formData.Add(fileContent, "template", Path.GetFileName(templateFilePath));
-            formData.Add(new StringContent(JsonSerializer.Serialize(data)), "jsonData");
-            if (!string.IsNullOrWhiteSpace(docRootElementName))
-            {
-                formData.Add(new StringContent(docRootElementName), "docRootElementName");
-            }
-
-            var stream = await GetResponse("api/v1/word/templating/pdf", formData).ConfigureAwait(false);
-            return stream;
+            return await CreateDocumentFromTemplate("pdf", templateFilePath, data, docRootElementName).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -95,14 +68,17 @@ internal class DocumentService : IDocumentService
 
     public async Task<string> ExtractContentFromWord(string wordFilePath, WordExtractOptions options)
     {
-#pragma warning disable CA2007
-        await using var fileStream = File.OpenRead(wordFilePath);
-#pragma warning restore CA2007
+        using var fileStream = File.OpenRead(wordFilePath);
 
         var fileName = Path.GetFileName(wordFilePath);
         return await ExtractContentFromWord(fileStream, fileName, options).ConfigureAwait(false);
     }
 
+    [SuppressMessage(
+        "Microsoft.Reliability",
+        "CA2000:Dispose objects before losing scope",
+        Justification = "MultipartFormDataContent will take ownership of HttpContent objects added to it and will dispose them."
+    )]
     public async Task<string> ExtractContentFromWord(Stream document, string filename, WordExtractOptions options)
     {
         try
@@ -147,6 +123,11 @@ internal class DocumentService : IDocumentService
         }
     }
 
+    [SuppressMessage(
+        "Microsoft.Reliability",
+        "CA2000:Dispose objects before losing scope",
+        Justification = "MultipartFormDataContent will take ownership of HttpContent objects added to it and will dispose them."
+    )]
     public async Task<string> ConvertWordToHtml(string wordFilePath)
     {
         try
@@ -168,6 +149,31 @@ internal class DocumentService : IDocumentService
         {
             throw new DocumentServiceException("Error occured while converting word to html", e);
         }
+    }
+
+    [SuppressMessage(
+        "Microsoft.Reliability",
+        "CA2000:Dispose objects before losing scope",
+        Justification = "MultipartFormDataContent will take ownership of HttpContent objects added to it and will dispose them."
+    )]
+    private async Task<Stream> CreateDocumentFromTemplate(string route, string templateFilePath, object data, string? docRootElementName = null)
+    {
+        using var formData = new MultipartFormDataContent();
+        var fileStream = File.OpenRead(templateFilePath);
+
+        var fileContent = new StreamContent(fileStream);
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
+        formData.Add(fileContent, "template", Path.GetFileName(templateFilePath));
+
+        formData.Add(new StringContent(JsonSerializer.Serialize(data)), "jsonData");
+
+        if (!string.IsNullOrWhiteSpace(docRootElementName))
+        {
+            formData.Add(new StringContent(docRootElementName), "docRootElementName");
+        }
+
+        var stream = await GetResponse($"api/v1/word/templating/{route}", formData).ConfigureAwait(false);
+        return stream;
     }
 
     private async Task<Stream> GetResponse(string requestUri, HttpContent content)

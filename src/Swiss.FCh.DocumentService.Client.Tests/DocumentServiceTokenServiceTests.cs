@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http.Json;
 using Swiss.FCh.DocumentService.Client.Configuration;
 using Microsoft.Extensions.Options;
@@ -44,8 +44,9 @@ internal sealed class DocumentServiceTokenServiceTests
     {
         var responseMock = new { access_token = "some_token", expires_in = 86400 };
 
-        var httpMock = new MockHttpMessageHandler();
-        httpMock.When(_documentServiceOptions.TokenUrl).Respond(HttpStatusCode.OK, JsonContent.Create(responseMock));
+        using var httpMock = new MockHttpMessageHandler();
+        using var mockResponseContent = JsonContent.Create(responseMock);
+        httpMock.When(_documentServiceOptions.TokenUrl).Respond(HttpStatusCode.OK, mockResponseContent);
         _httpClientFactoryMock.CreateClient(Arg.Any<string>()).Returns(httpMock.ToHttpClient());
 
         var token = await _documentServiceTokenService.GetToken().ConfigureAwait(false);
@@ -60,8 +61,9 @@ internal sealed class DocumentServiceTokenServiceTests
     {
         var responseMock = new { access_token = "some_token", expires_in = 86400 };
 
-        var httpMock = new MockHttpMessageHandler();
-        httpMock.When(_documentServiceOptions.TokenUrl).Respond(HttpStatusCode.OK, JsonContent.Create(responseMock));
+        using var httpMock = new MockHttpMessageHandler();
+        using var mockResponseContent = JsonContent.Create(responseMock);
+        httpMock.When(_documentServiceOptions.TokenUrl).Respond(HttpStatusCode.OK, mockResponseContent);
         _httpClientFactoryMock.CreateClient(Arg.Any<string>()).Returns(httpMock.ToHttpClient());
 
         await _documentServiceTokenService.GetToken().ConfigureAwait(false);

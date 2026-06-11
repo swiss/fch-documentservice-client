@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -34,12 +34,12 @@ internal class DocumentServiceTokenService : IDocumentServiceTokenService
 
         using var client = _httpClientFactory.CreateClient();
         var uri = new UriBuilder(_documentServiceOptions.TokenUrl);
-        var body = new FormUrlEncodedContent([new KeyValuePair<string, string>("grant_type", "client_credentials")]);
+        using var body = new FormUrlEncodedContent([new KeyValuePair<string, string>("grant_type", "client_credentials")]);
 
         var bytes = new UTF8Encoding().GetBytes($"{_documentServiceOptions.ClientId}:{_documentServiceOptions.ClientSecret}");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(bytes));
 
-        var response = await client.PostAsync(uri.Uri, body).ConfigureAwait(false);
+        using var response = await client.PostAsync(uri.Uri, body).ConfigureAwait(false);
         var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         var token = JsonSerializer.Deserialize<DocumentServiceTokenResponse>(content);
 
