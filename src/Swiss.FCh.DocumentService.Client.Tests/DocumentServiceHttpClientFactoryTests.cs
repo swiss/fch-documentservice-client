@@ -1,4 +1,4 @@
-﻿using Swiss.FCh.DocumentService.Client.Configuration;
+using Swiss.FCh.DocumentService.Client.Configuration;
 using Microsoft.Extensions.Options;
 using NSubstitute.ClearExtensions;
 using RichardSzalay.MockHttp;
@@ -41,9 +41,9 @@ internal sealed class DocumentServiceHttpClientFactoryTests
     [Test]
     public async Task Create_ShouldReturnClient()
     {
-        var httpMock = new MockHttpMessageHandler();
+        using var httpMock = new MockHttpMessageHandler();
         _httpClientFactoryMock.CreateClient(DocumentServiceOptions.HttpClientName).Returns(httpMock.ToHttpClient());
-        var client = await _documentServiceHttpClientFactory.Create().ConfigureAwait(false);
+        using var client = await _documentServiceHttpClientFactory.Create().ConfigureAwait(false);
 
         await _documentServiceTokenService.Received(1).GetToken().ConfigureAwait(false);
         Assert.That(client, Is.Not.Null);
