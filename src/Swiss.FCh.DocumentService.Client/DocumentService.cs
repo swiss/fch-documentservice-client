@@ -42,11 +42,11 @@ internal class DocumentService : IDocumentService
         }
     }
 
-    public async Task<Stream> CreateWordFromTemplate(string templateFilePath, object data, string? docRootElementName = null)
+    public async Task<Stream> CreateWordFromTemplate(string templateFilePath, object data, string? docRootElementName = null, IEnumerable<string>? exactDateTimeParseFormats = null)
     {
         try
         {
-            return await CreateDocumentFromTemplate("template", templateFilePath, data, docRootElementName).ConfigureAwait(false);
+            return await CreateDocumentFromTemplate("template", templateFilePath, data, docRootElementName, exactDateTimeParseFormats).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -54,11 +54,11 @@ internal class DocumentService : IDocumentService
         }
     }
 
-    public async Task<Stream> CreatePdfFromTemplate(string templateFilePath, object data, string? docRootElementName = null)
+    public async Task<Stream> CreatePdfFromTemplate(string templateFilePath, object data, string? docRootElementName = null, IEnumerable<string>? exactDateTimeParseFormats = null)
     {
         try
         {
-            return await CreateDocumentFromTemplate("pdf", templateFilePath, data, docRootElementName).ConfigureAwait(false);
+            return await CreateDocumentFromTemplate("pdf", templateFilePath, data, docRootElementName, exactDateTimeParseFormats).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -156,7 +156,7 @@ internal class DocumentService : IDocumentService
         "CA2000:Dispose objects before losing scope",
         Justification = "MultipartFormDataContent will take ownership of HttpContent objects added to it and will dispose them."
     )]
-    private async Task<Stream> CreateDocumentFromTemplate(string route, string templateFilePath, object data, string? docRootElementName = null)
+    private async Task<Stream> CreateDocumentFromTemplate(string route, string templateFilePath, object data, string? docRootElementName = null, IEnumerable<string>? exactDateTimeParseFormats = null)
     {
         using var formData = new MultipartFormDataContent();
         var fileStream = File.OpenRead(templateFilePath);
@@ -170,6 +170,14 @@ internal class DocumentService : IDocumentService
         if (!string.IsNullOrWhiteSpace(docRootElementName))
         {
             formData.Add(new StringContent(docRootElementName), "docRootElementName");
+        }
+
+        if (exactDateTimeParseFormats is not null)
+        {
+            foreach (var format in exactDateTimeParseFormats)
+            {
+                formData.Add(new StringContent(format), "exactDateTimeParseFormats");
+            }
         }
 
         var stream = await GetResponse($"api/v1/word/templating/{route}", formData).ConfigureAwait(false);
