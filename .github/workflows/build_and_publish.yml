@@ -28,13 +28,13 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: dotnet restore
-      run: dotnet restore src/Swiss.FCh.DocumentService.Client.sln
+      run: dotnet restore src/Swiss.FCh.DocumentService.Client.slnx
 
     - name: dotnet build
-      run: dotnet build src/Swiss.FCh.DocumentService.Client.sln --configuration Release --no-restore
+      run: dotnet build src/Swiss.FCh.DocumentService.Client.slnx --configuration Release --no-restore
 
     - name: dotnet test
-      run: dotnet test src/Swiss.FCh.DocumentService.Client.sln --configuration Release --no-build --verbosity normal
+      run: dotnet test src/Swiss.FCh.DocumentService.Client.slnx --configuration Release --no-build --verbosity normal
 
     - name: dotnet pack
       run: dotnet pack src/Swiss.FCh.DocumentService.Client/Swiss.FCh.DocumentService.Client.csproj --configuration Release --no-build -o ./nupkgs /p:Version=${{ steps.get_version.outputs.version }}
