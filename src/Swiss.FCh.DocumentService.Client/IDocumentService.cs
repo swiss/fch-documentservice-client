@@ -5,8 +5,8 @@ namespace Swiss.FCh.DocumentService.Client;
 public interface IDocumentService
 {
     Task<Stream> CreateExcel(Spreadsheet spreadsheet, SpreadsheetOptions? options = null);
-    Task<Stream> CreateWordFromTemplate(string templateFilePath, object data, string? docRootElementName = null);
-    Task<Stream> CreatePdfFromTemplate(string templateFilePath, object data, string? docRootElementName = null);
+    Task<Stream> CreateWordFromTemplate(string templateFilePath, object data, string? docRootElementName = null, IEnumerable<string>? exactDateTimeParseFormats = null);
+    Task<Stream> CreatePdfFromTemplate(string templateFilePath, object data, string? docRootElementName = null, IEnumerable<string>? exactDateTimeParseFormats = null);
     Task<string> ExtractContentFromWord(string wordFilePath, WordExtractOptions options);
     Task<string> ExtractContentFromWord(Stream document, string fileName, WordExtractOptions options);
     Task<string> ConvertWordToHtml(string wordFilePath);
