@@ -26,10 +26,13 @@ jobs:
           global-json-file: global.json
 
       - name: Install dotnet tool
-        run: dotnet tool install -g dotnet-project-licenses
+        run: dotnet tool install -g nuget-license
+
+      - name: Restore packages
+        run: dotnet restore src/Swiss.FCh.DocumentService.Client.slnx
 
       - name: Generate THIRD_PARTY_LICENSES.md
-        run: dotnet-project-licenses --input . --md --outfile THIRD_PARTY_LICENSES.md
+        run: nuget-license -i src/Swiss.FCh.DocumentService.Client.slnx -o Markdown -fo THIRD_PARTY_LICENSES.md
 
       - name: Commit and push THIRD_PARTY_LICENSES.md
         run: |
