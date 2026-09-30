@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.9.1
+- Add global.json for consistent SDK usage
+
 ## v1.9.0
 - Update dependencies
 - Add option for exact date time parsing
