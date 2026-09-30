@@ -1,6 +1,6 @@
 using System.Net.Http.Headers;
-using Swiss.FCh.DocumentService.Client.Configuration;
 using Microsoft.Extensions.Options;
+using Swiss.FCh.DocumentService.Client.Configuration;
 
 namespace Swiss.FCh.DocumentService.Client;
 

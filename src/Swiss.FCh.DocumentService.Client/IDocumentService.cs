@@ -1,4 +1,4 @@
-﻿using Swiss.FCh.DocumentService.Client.Models;
+using Swiss.FCh.DocumentService.Client.Models;
 
 namespace Swiss.FCh.DocumentService.Client;
 
