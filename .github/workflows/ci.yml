@@ -1,0 +1,36 @@
+name: CI (analyze, test, scan vulnerabilities)
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    branches:
+      - main
+  merge_group:
+
+jobs:
+  build_test_scan:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v7
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v6
+      with:
+        global-json-file: global.json
+
+    - name: dotnet restore
+      run: dotnet restore src/Swiss.FCh.DocumentService.Client.slnx
+
+    - name: dotnet build
+      run: dotnet build src/Swiss.FCh.DocumentService.Client.slnx --configuration Release --no-restore
+
+    - name: dotnet test
+      run: dotnet test src/Swiss.FCh.DocumentService.Client.slnx --configuration Release --no-build --verbosity normal
+
+    - name: Scan NuGet packages for known vulnerabilities
+      run: dotnet list src/Swiss.FCh.DocumentService.Client.slnx package --vulnerable --include-transitive
