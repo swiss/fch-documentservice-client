@@ -25,12 +25,9 @@ internal class DocumentService : IDocumentService
         {
             var json = JsonSerializer.Serialize(spreadsheet);
             using var jsonStringContent = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
-            if (options is not null)
+            if (options is not null && options.SetAutoFilter)
             {
-                if (options.SetAutoFilter)
-                {
-                    jsonStringContent.Headers.Add("setAutoFilter", options.SetAutoFilter.ToString());
-                }
+                jsonStringContent.Headers.Add("setAutoFilter", options.SetAutoFilter.ToString());
             }
 
             var stream = await GetResponse("api/v1/excel/generate", jsonStringContent).ConfigureAwait(false);
@@ -79,7 +76,7 @@ internal class DocumentService : IDocumentService
         "CA2000:Dispose objects before losing scope",
         Justification = "MultipartFormDataContent will take ownership of HttpContent objects added to it and will dispose them."
     )]
-    public async Task<string> ExtractContentFromWord(Stream document, string filename, WordExtractOptions options)
+    public async Task<string> ExtractContentFromWord(Stream document, string fileName, WordExtractOptions options)
     {
         try
         {
@@ -89,7 +86,7 @@ internal class DocumentService : IDocumentService
             var fileContent = new StreamContent(document);
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
 
-            formData.Add(fileContent, "file", filename);
+            formData.Add(fileContent, "file", fileName);
             formData.Headers.Add("Start-Paragraph", HttpUtility.UrlEncode(options.StartAfterParagraphText));
             if (!string.IsNullOrWhiteSpace(options.StopBeforeParagraphText))
             {

@@ -4,10 +4,12 @@ public class SpreadsheetOptions
 {
     public bool SetAutoFilter { get; init; }
 
-    public static SpreadsheetOptions Default = new SpreadsheetOptions
+    private static readonly SpreadsheetOptions _default = new SpreadsheetOptions
     {
         SetAutoFilter = false
     };
+
+    public static SpreadsheetOptions Default => _default;
 }
 
 public class Spreadsheet

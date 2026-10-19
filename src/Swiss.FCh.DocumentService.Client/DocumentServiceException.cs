@@ -1,6 +1,6 @@
-﻿namespace Swiss.FCh.DocumentService.Client;
+﻿
+namespace Swiss.FCh.DocumentService.Client;
 
-[Serializable]
 public class DocumentServiceException : Exception
 {
     public DocumentServiceException()

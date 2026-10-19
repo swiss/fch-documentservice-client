@@ -20,11 +20,14 @@ public class DocumentServiceHealthCheck : IHealthCheck
             using var client = await _documentServiceHttpClientFactory.Create().ConfigureAwait(false);
             var response = await client.GetAsync("api/v1/systemstatus", cancellationToken).ConfigureAwait(false);
 
-            return response.IsSuccessStatusCode
-                ? HealthCheckResult.Healthy("Document Service is reachable.")
-                : context.Registration.FailureStatus == HealthStatus.Degraded
-                    ? HealthCheckResult.Degraded($"Document Service returned status code ({(int)response.StatusCode}) {response.StatusCode}.")
-                    : HealthCheckResult.Unhealthy($"Document Service returned status code ({(int)response.StatusCode}) {response.StatusCode}.");
+            if (response.IsSuccessStatusCode)
+            {
+                return HealthCheckResult.Healthy("Document Service is reachable.");
+            }
+
+            return context.Registration.FailureStatus == HealthStatus.Degraded
+                ? HealthCheckResult.Degraded($"Document Service returned status code ({(int)response.StatusCode}) {response.StatusCode}.")
+                : HealthCheckResult.Unhealthy($"Document Service returned status code ({(int)response.StatusCode}) {response.StatusCode}.");
         }
         catch (Exception ex)
         {
