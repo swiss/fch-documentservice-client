@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.9.2
+Dependencies upgraded
+
 ## v1.9.1
 - Add global.json for consistent SDK usage
 - Replace stale dotnet-project-licenses with nuget-license tool
