@@ -1,7 +1,7 @@
-using Swiss.FCh.DocumentService.Client.Configuration;
 using Microsoft.Extensions.Options;
 using NSubstitute.ClearExtensions;
 using RichardSzalay.MockHttp;
+using Swiss.FCh.DocumentService.Client.Configuration;
 
 namespace Swiss.FCh.DocumentService.Client.Tests;
 

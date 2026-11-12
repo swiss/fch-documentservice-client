@@ -1,4 +1,4 @@
-﻿namespace Swiss.FCh.DocumentService.Client;
+namespace Swiss.FCh.DocumentService.Client;
 
 public class DocumentServiceException : Exception
 {

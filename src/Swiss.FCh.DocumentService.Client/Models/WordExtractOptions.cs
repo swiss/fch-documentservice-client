@@ -1,4 +1,4 @@
-﻿namespace Swiss.FCh.DocumentService.Client.Models;
+namespace Swiss.FCh.DocumentService.Client.Models;
 
 public enum WordExtractFormat
 {

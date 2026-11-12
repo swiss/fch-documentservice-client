@@ -4,8 +4,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication;
-using Swiss.FCh.DocumentService.Client.Configuration;
 using Microsoft.Extensions.Options;
+using Swiss.FCh.DocumentService.Client.Configuration;
 
 namespace Swiss.FCh.DocumentService.Client;
 

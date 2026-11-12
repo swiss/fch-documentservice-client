@@ -1,15 +1,13 @@
-﻿namespace Swiss.FCh.DocumentService.Client.Models;
+namespace Swiss.FCh.DocumentService.Client.Models;
 
 public class SpreadsheetOptions
 {
     public bool SetAutoFilter { get; init; }
 
-    private static readonly SpreadsheetOptions _default = new SpreadsheetOptions
+    public static SpreadsheetOptions Default { get; } = new()
     {
         SetAutoFilter = false
     };
-
-    public static SpreadsheetOptions Default => _default;
 }
 
 public class Spreadsheet

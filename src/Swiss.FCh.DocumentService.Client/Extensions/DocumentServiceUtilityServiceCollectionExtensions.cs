@@ -1,6 +1,6 @@
-﻿using Swiss.FCh.DocumentService.Client.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swiss.FCh.DocumentService.Client.Configuration;
 
 namespace Swiss.FCh.DocumentService.Client.Extensions;
 

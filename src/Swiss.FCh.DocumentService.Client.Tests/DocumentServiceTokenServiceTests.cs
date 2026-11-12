@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
-using Swiss.FCh.DocumentService.Client.Configuration;
 using Microsoft.Extensions.Options;
 using NSubstitute.ClearExtensions;
 using RichardSzalay.MockHttp;
+using Swiss.FCh.DocumentService.Client.Configuration;
 
 namespace Swiss.FCh.DocumentService.Client.Tests;
 
